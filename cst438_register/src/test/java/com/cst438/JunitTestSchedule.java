@@ -24,12 +24,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.cst438.controller.ScheduleController;
+import com.cst438.controller.StudentController;
 import com.cst438.domain.Course;
 import com.cst438.domain.CourseRepository;
 import com.cst438.domain.Enrollment;
 import com.cst438.domain.EnrollmentRepository;
 import com.cst438.domain.ScheduleDTO;
 import com.cst438.domain.Student;
+import com.cst438.domain.StudentDTO;
 import com.cst438.domain.StudentRepository;
 import com.cst438.service.GradebookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +51,7 @@ import org.springframework.test.context.ContextConfiguration;
  *  addFilters=false turns off security.  (I could not get security to work in test environment.)
  *  WebMvcTest is needed for test environment to create Repository classes.
  */
-@ContextConfiguration(classes = { ScheduleController.class })
+@ContextConfiguration(classes = { ScheduleController.class, StudentController.class })
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest
 public class JunitTestSchedule {
@@ -76,6 +78,100 @@ public class JunitTestSchedule {
 	@Autowired
 	private MockMvc mvc;
 
+	@Test
+	public void addStudent() throws Exception {
+		
+		MockHttpServletResponse response;
+		
+		// Create student object
+		Student newStudent = new Student();
+		newStudent.setName(TEST_STUDENT_NAME);
+		newStudent.setEmail(TEST_STUDENT_EMAIL);
+		newStudent.setStatusCode(0);
+		newStudent.setStudent_id(4);
+		
+		// Create studentDTO Object
+		StudentDTO studentDTO = new StudentDTO();
+		studentDTO.email = TEST_STUDENT_EMAIL;
+		studentDTO.name = TEST_STUDENT_NAME;
+		studentDTO.statusCode = 0;
+		studentDTO.status = "good";
+		
+		// Adding the student to the database, and verifying return status = OK
+		response = mvc.perform(
+				MockMvcRequestBuilders
+			      .post("/student")
+			      .content(asJsonString(studentDTO))
+			      .contentType(MediaType.APPLICATION_JSON)
+			      .accept(MediaType.APPLICATION_JSON))
+				.andReturn().getResponse();
+		
+		assertEquals(200, response.getStatus());
+		
+		given(studentRepository.findByEmail(TEST_STUDENT_EMAIL)).willReturn(newStudent);
+		
+		// Checking that the email is in the response
+		StudentDTO result = fromJsonString(response.getContentAsString(), StudentDTO.class);
+		assertEquals( TEST_STUDENT_EMAIL , result.email);
+		
+		// Trying to add the same email to the database, and verifying return status = 400 (NOT OK)
+		response = mvc.perform(
+				MockMvcRequestBuilders
+			      .post("/student")
+			      .content(asJsonString(studentDTO))
+			      .contentType(MediaType.APPLICATION_JSON)
+			      .accept(MediaType.APPLICATION_JSON))
+				.andReturn().getResponse();
+		
+		assertEquals(400, response.getStatus());
+		
+		// verify that repository save method was called.
+		verify(studentRepository).save(any(Student.class));
+	}
+	
+	
+	@Test
+	public void updateStudentReg() throws Exception {
+		
+		MockHttpServletResponse response;
+		
+		// Create student object, and add to the system
+		Student newStudent = new Student();
+		newStudent.setName(TEST_STUDENT_NAME);
+		newStudent.setEmail(TEST_STUDENT_EMAIL);
+		newStudent.setStatusCode(0);
+		newStudent.setStudent_id(4);
+		
+		given(studentRepository.findByEmail(TEST_STUDENT_EMAIL)).willReturn(newStudent);
+		
+		// create student DTO
+		StudentDTO studentDTO = new StudentDTO();
+		studentDTO.email = TEST_STUDENT_EMAIL;
+		studentDTO.statusCode = 50;
+		studentDTO.status = "good";
+		
+		// Updating student registration
+		response = mvc.perform(
+				MockMvcRequestBuilders
+			      .put("/updateStudentReg")
+			      .content(asJsonString(studentDTO))
+			      .contentType(MediaType.APPLICATION_JSON)
+			      .accept(MediaType.APPLICATION_JSON))
+				.andReturn().getResponse();
+		
+		assertEquals(200, response.getStatus());
+				
+		// Checking that the updated registration code is in the response
+		StudentDTO result = fromJsonString(response.getContentAsString(), StudentDTO.class);
+		assertEquals( 50 , result.statusCode);
+		
+		// verify that repository save method was called.
+		verify(studentRepository).save(any(Student.class));
+		
+		// verify that repository find method was called.
+		verify(studentRepository, times(1)).findByEmail(TEST_STUDENT_EMAIL);
+	}
+	
 	@Test
 	public void addCourse()  throws Exception {
 		

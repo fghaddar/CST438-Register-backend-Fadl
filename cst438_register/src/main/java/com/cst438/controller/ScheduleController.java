@@ -92,7 +92,6 @@ public class ScheduleController {
 		} else {
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Course_id invalid or student not allowed to register for the course.  "+courseDTO.course_id);
 		}
-		
 	}
 	
 	@DeleteMapping("/schedule/{enrollment_id}")
@@ -114,6 +113,8 @@ public class ScheduleController {
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Enrollment_id invalid. "+enrollment_id);
 		}
 	}
+
+	
 	
 	/* 
 	 * helper method to transform course, enrollment, student entities into 
@@ -152,5 +153,4 @@ public class ScheduleController {
 		courseDTO.grade = e.getCourseGrade();
 		return courseDTO;
 	}
-	
 }

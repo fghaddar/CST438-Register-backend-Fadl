@@ -26,7 +26,6 @@ public class Enrollment {
 	private String semester;
 	private String courseGrade;
 	
-	
 	public int getEnrollment_id() {
 		return enrollment_id;
 	}

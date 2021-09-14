@@ -13,7 +13,6 @@ public class EnrollmentDTO {
 		this.course_id = 0;
 	}
 	
-	
 	public EnrollmentDTO(String studentEmail, String studentName, int course_id) {
 		this.id = 0;
 		this.studentEmail=studentEmail;
