@@ -41,7 +41,7 @@ public class StudentController {
 	public StudentDTO addStudent ( @RequestBody StudentDTO studentDTO ) {
 		
 		Student student = studentRepository.findByEmail(studentDTO.email);
-		
+		System.out.println("\n\n\n\n\n\n\n\n\n\n email is: " + studentDTO.email + "\n\n\n\n\n");
 		if (student != null)
 		{
 			throw  new ResponseStatusException( HttpStatus.BAD_REQUEST, "Student email is already in use:  " +studentDTO.email);
@@ -49,8 +49,10 @@ public class StudentController {
 		
 		else
 		{
+			System.out.println("\n\n\n\n\n\n\n\n\n\n reached and email is still: " + studentDTO.email + "\n\n\n\n\n");
 			student = new Student();
 			student.setEmail(studentDTO.email);
+			System.out.println("\n\n\n\n\n\n\n\n\n\n reached and email is still: " + student.getEmail() + "\n\n\n\n\n");
 			student.setName(studentDTO.name);
 			student.setStatusCode(studentDTO.statusCode);
 			student.setStatus(studentDTO.status);
