@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -33,9 +34,9 @@ import com.cst438.domain.EnrollmentRepository;
 @SpringBootTest
 public class EndToEndScheduleTest {
 
-	public static final String CHROME_DRIVER_FILE_LOCATION = "C:/chromedriver_win32/chromedriver.exe";
+	public static final String CHROME_DRIVER_FILE_LOCATION = "C:\\Users\\fadlg\\Dropbox\\My PC (LAPTOP-T13A7Q9Q)\\Downloads\\edgedriver_win32\\msedgedriver.exe";
 
-	public static final String URL = "http://localhost:3000";
+	public static final String URL = "https://cst438register--frontend.herokuapp.com/";
 
 	public static final String TEST_USER_EMAIL = "test@csumb.edu";
 
@@ -54,6 +55,7 @@ public class EndToEndScheduleTest {
 	@Test
 	public void addCourseTest() throws Exception {
 
+		
 		Enrollment x = null;
 		do {
 			x = enrollmentRepository.findByEmailAndCourseId(TEST_USER_EMAIL, TEST_COURSE_ID);
@@ -69,8 +71,8 @@ public class EndToEndScheduleTest {
 		// IE 		webdriver.ie.driver 		InternetExplorerDriver
 		//@formatter:on
 
-		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_FILE_LOCATION);
-		WebDriver driver = new ChromeDriver();
+		System.setProperty("webdriver.edge.driver", CHROME_DRIVER_FILE_LOCATION);
+		WebDriver driver = new EdgeDriver();
 		// Puts an Implicit wait for 10 seconds before throwing exception
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
