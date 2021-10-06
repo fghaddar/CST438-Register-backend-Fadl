@@ -69,6 +69,7 @@ public class ScheduleController {
 		
 		String student_email = "test@csumb.edu";   // student's email 
 		
+		System.out.println("\n\n\nCourseID is: " + courseDTO.course_id + "\n\n\n");
 		Student student = studentRepository.findByEmail(student_email);
 		Course course  = courseRepository.findByCourse_id(courseDTO.course_id);
 		
