@@ -74,8 +74,9 @@ public class ScheduleController {
 	@Transactional
 	public ScheduleDTO.CourseDTO addCourse( @RequestBody ScheduleDTO.CourseDTO courseDTO, @AuthenticationPrincipal OAuth2User principal) { 
 		
+
 		String student_email = principal.getAttribute("email");
-		
+
 		Student student = studentRepository.findByEmail(student_email);
 		Course course  = courseRepository.findByCourse_id(courseDTO.course_id);
 		
