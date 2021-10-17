@@ -41,7 +41,19 @@
     		<artifactId>spring-boot-devtools</artifactId>
     		<optional>true</optional>
 		</dependency>
+		
+		<!-- for Oauth2 -->
+    	<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+		<!-- end of Oauth2 -->
 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
 		<!-- for rabbitmq -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
